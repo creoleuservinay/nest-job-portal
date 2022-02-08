@@ -8,11 +8,13 @@ import {
   Post,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { BanchmarkInterceptor } from 'src/interceptor/benchmark-intercepter';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { JobsService } from './jobs.service';
 
+@ApiTags('Jobs')
 @Controller('jobs')
 @UseInterceptors(BanchmarkInterceptor)
 export class JobsController {
@@ -54,5 +56,10 @@ export class JobsController {
     } catch (error) {
       return error;
     }
+  }
+
+  @Get('testing')
+  getHelloFromOtherService() {
+    return this.jobService.returnHelloFromOtherServide();
   }
 }

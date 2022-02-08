@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { TestService } from 'src/test/test.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { Job, JobDocument } from './schemas/job.schema';
 
 @Injectable()
 export class JobsService {
-  constructor(@InjectModel(Job.name) private jobModel: Model<JobDocument>) {}
+  constructor(
+    @InjectModel(Job.name) private jobModel: Model<JobDocument>,
+    protected testService: TestService,
+  ) {}
   async createNewjob(job: CreateJobDto) {
     return await this.jobModel.create(job);
   }
@@ -21,5 +25,9 @@ export class JobsService {
 
   async deleteJob(jobId: string) {
     return await this.jobModel.deleteOne({ _id: Object(jobId) });
+  }
+
+  async returnHelloFromOtherServide() {
+    return this.testService.getHello();
   }
 }
