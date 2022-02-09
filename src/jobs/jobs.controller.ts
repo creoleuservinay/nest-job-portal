@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseInterceptors,
+  Version,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BanchmarkInterceptor } from 'src/interceptor/benchmark-intercepter';
@@ -15,7 +16,7 @@ import { UpdateJobDto } from './dto/update-job.dto';
 import { JobsService } from './jobs.service';
 
 @ApiTags('Jobs')
-@Controller('jobs')
+@Controller({path: '/jobs', version: '1'})
 @UseInterceptors(BanchmarkInterceptor)
 export class JobsController {
   constructor(protected jobService: JobsService) {}
