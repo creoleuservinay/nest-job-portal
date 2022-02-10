@@ -10,14 +10,12 @@ export class AppService {
   ) {}
   
   async getHello(): Promise<any> {
-
   const job = await this.audioQueue.add({
     foo: 'bar',
   });
   console.log(job, 'Created');
 
   return this.audioconsumer.transcode(job);
-
     return 'Hello World! From here';
   }
 }

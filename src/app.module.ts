@@ -9,9 +9,14 @@ import { TestModule } from './test/test.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bull';
 import { AudioConsumer } from './audio.consumer';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ProfileModule } from './profile/profile.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
+    ProfileModule,
+    EventEmitterModule.forRoot(),
     BullModule.forRoot({
       redis: {
         host: 'localhost',

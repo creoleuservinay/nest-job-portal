@@ -1,5 +1,5 @@
 import { BullModule, Processor } from '@nestjs/bull';
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Get, Logger, Render } from '@nestjs/common';
 import { Cron, CronExpression, Interval, SchedulerRegistry } from '@nestjs/schedule';
 import { AppService } from './app.service';
 import { AudioConsumer } from './audio.consumer';
@@ -17,13 +17,18 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // @Cron('* * * * * *', {
-  //   name: 'notifications',
-  // })
+  @Get('profile')
+  @Render('index')
+  root() {
+    return { message: 'Hello world!' };
+  }
 
-  // handleCron() {
-  //   this.logger.log('Calling in every second');
-  //   const job = this.schedulerRegistry.getCronJob('notifications');
-  //   console.log(job.stop());
-  // }
+  @Cron('30 * * * * *', {
+    name: 'notifications',
+  })
+  handleCron() {
+    this.logger.log('Calling in every second');
+    const job = this.schedulerRegistry.getCronJob('notifications');
+    job.stop();
+  }
 }
