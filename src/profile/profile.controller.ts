@@ -1,8 +1,10 @@
-import { Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, Post, Res, UploadedFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { ApiTags } from "@nestjs/swagger";
+import { Response } from "express";
+import { createReadStream } from "fs";
 import { diskStorage } from "multer";
-import { extname } from "path/posix";
+import { extname, join } from "path/posix";
 import { ProfileService } from "./profile.services";
 
 @ApiTags('Profile')
@@ -50,5 +52,11 @@ export class ProfileController {
   @Get('images')
   async allImages(){
     return this.profileService.returnAllImages();
+  }
+
+  @Get('stream')
+  getFile(@Res() res: Response) {
+    const file = createReadStream(join(process.cwd(), 'package.json'));
+    file.pipe(res);
   }
 }
