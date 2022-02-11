@@ -1,16 +1,35 @@
-import { Controller, Get, Post, Res, UploadedFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { HttpService } from "@nestjs/axios";
+import { Controller, Get, Post, Res, Session, UploadedFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { ApiTags } from "@nestjs/swagger";
+import { AxiosResponse } from "axios";
 import { Response } from "express";
+import session from "express-session";
 import { createReadStream } from "fs";
 import { diskStorage } from "multer";
 import { extname, join } from "path/posix";
+import { firstValueFrom, Observable } from "rxjs";
 import { ProfileService } from "./profile.services";
 
 @ApiTags('Profile')
 @Controller({ path: '/profile', version: '1' })
 export class ProfileController {
-  constructor(private profileService: ProfileService) { }
+  constructor(private profileService: ProfileService,
+   private httpService: HttpService
+    ) { }
+
+  @Get('callparent')
+    async findAll(): Promise<AxiosResponse> {
+      const response =  await firstValueFrom(this.httpService.get('http://localhost:8000/app-second', {}));
+      return response.data;
+  }
+
+  @Get('session')
+  async getAuthSession(@Session() session: Record<string, any>){
+    console.log(session.id);
+    session.authenticate = true;
+    return session;
+  }
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file',
@@ -51,6 +70,7 @@ export class ProfileController {
 
   @Get('images')
   async allImages(){
+
     return this.profileService.returnAllImages();
   }
 

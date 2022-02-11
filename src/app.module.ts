@@ -12,6 +12,9 @@ import { AudioConsumer } from './audio.consumer';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ProfileModule } from './profile/profile.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { HttpModule } from '@nestjs/axios';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -32,6 +35,8 @@ import { MulterModule } from '@nestjs/platform-express';
     JobsModule,
     MongooseModule.forRoot('mongodb://localhost:27017/nest-job-portal'),
     ConfigModule.forRoot(),
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, AudioConsumer],

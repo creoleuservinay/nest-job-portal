@@ -1,3 +1,4 @@
+import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -8,6 +9,7 @@ import { Profile, ProfileSchema } from "./schemas/profile.schema";
 
 @Module({
   imports:[
+    HttpModule,
     ConfigModule.forRoot(),
     MongooseModule.forFeature([{ name: Profile.name, schema: ProfileSchema }]),
   ],

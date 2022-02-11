@@ -5,11 +5,24 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import { join } from 'path/posix';
 import { AppModule } from './app.module';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix('api/');
-  app.use(cookieParser());
+  app.use(
+    session({
+      name: 'NestSession',
+      secret: 'apdjdjjdjdj',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 60000
+      }
+    }),
+  );
+  
+
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'src/public/views'));
   app.setViewEngine('hbs');
